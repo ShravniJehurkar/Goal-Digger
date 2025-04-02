@@ -65,19 +65,22 @@ Shravni Jehurkar
 
 ## About
 
-A career guidance website for children of 6th to 10th (includes fun questionnaire to determine their interest) and for 11th to 12th and more (uses ikigai method to determine their interest).
+A career guidance website for students from 6th to 12th grade, featuring age-appropriate questionnaires:
+
+- Fun Questionnaire for 6th to 9th grade students
+- Ikigai Method for 10th to 12th grade students
 
 ## Accessing the Website
 
 The website is available at: [https://goal-digger.vercel.app](https://goal-digger.vercel.app)
 
-### For Students (6th to 10th Grade)
+### For Students (6th to 9th Grade)
 
 - Visit the website
 - Click on "Fun Questionnaire"
 - Answer the questions to discover your interests and potential career paths
 
-### For Students (11th Grade and Above)
+### For Students (10th to 12th Grade)
 
 - Visit the website
 - Click on "Ikigai Method"
