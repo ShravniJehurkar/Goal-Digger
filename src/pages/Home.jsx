@@ -1,63 +1,96 @@
-import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
+  const navigate = useNavigate();
+  const [userProfile, setUserProfile] = useState(null);
+
+  useEffect(() => {
+    const profile = JSON.parse(localStorage.getItem('userProfile'));
+    setUserProfile(profile);
+  }, []);
+
+  const handleStartQuestionnaire = () => {
+    if (!userProfile) {
+      navigate('/profile');
+    } else {
+      if (userProfile.grade >= 10) {
+        navigate('/ikigai-questionnaire');
+      } else if (userProfile.grade >= 6) {
+        navigate('/fun-questionnaire');
+      } else {
+        alert('Sorry, this questionnaire is designed for students in 6th grade and above.');
+      }
+    }
+  };
+
   return (
-    <div className="space-y-16">
-      {/* Hero Section */}
-      <section className="text-center py-20">
-        <h1 className="text-5xl font-bold text-gray-900 mb-6">
-          Discover Your Career Path with
-          <span className="text-indigo-600"> GOAL DIGGER</span>
+    <div className="max-w-4xl mx-auto">
+      <div className="text-center mb-12">
+        <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+          Welcome to GOAL DIGGER 🎯
         </h1>
-        <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-          Unlock your potential using the Ikigai method to find the perfect career that aligns with your passions, skills, and values.
+        <p className="text-xl text-gray-600 dark:text-gray-300">
+          Discover your career path through personalized guidance
         </p>
-        <Link
-          to="/questionnaire"
-          className="bg-indigo-600 text-white px-8 py-3 rounded-lg text-lg font-semibold hover:bg-indigo-700 transition-colors"
+      </div>
+
+      <div className="grid md:grid-cols-2 gap-8 mb-12">
+        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+          <h2 className="text-2xl font-semibold mb-4 text-indigo-600 dark:text-indigo-400">
+            For Students in 6th-9th Grade
+          </h2>
+          <p className="text-gray-600 dark:text-gray-300 mb-4">
+            Take our fun and interactive questionnaire to explore your interests and discover potential career paths that match your personality and aspirations.
+          </p>
+          <ul className="space-y-2 mb-6">
+            <li className="flex items-center text-gray-700 dark:text-gray-200">
+              <span className="text-green-500 mr-2">✓</span>
+              Interactive questions about your interests
+            </li>
+            <li className="flex items-center text-gray-700 dark:text-gray-200">
+              <span className="text-green-500 mr-2">✓</span>
+              Personality-based career suggestions
+            </li>
+            <li className="flex items-center text-gray-700 dark:text-gray-200">
+              <span className="text-green-500 mr-2">✓</span>
+              Fun and engaging experience
+            </li>
+          </ul>
+        </div>
+
+        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+          <h2 className="text-2xl font-semibold mb-4 text-indigo-600 dark:text-indigo-400">
+            For Students in 10th-12th Grade
+          </h2>
+          <p className="text-gray-600 dark:text-gray-300 mb-4">
+            Experience our comprehensive Ikigai-based questionnaire to find your perfect career path by exploring your passions, skills, mission, and profession.
+          </p>
+          <ul className="space-y-2 mb-6">
+            <li className="flex items-center text-gray-700 dark:text-gray-200">
+              <span className="text-green-500 mr-2">✓</span>
+              Deep self-reflection exercises
+            </li>
+            <li className="flex items-center text-gray-700 dark:text-gray-200">
+              <span className="text-green-500 mr-2">✓</span>
+              Detailed career analysis
+            </li>
+            <li className="flex items-center text-gray-700 dark:text-gray-200">
+              <span className="text-green-500 mr-2">✓</span>
+              Personalized recommendations
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div className="text-center">
+        <button
+          onClick={handleStartQuestionnaire}
+          className="px-8 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-lg font-semibold"
         >
-          Start Your Journey
-        </Link>
-      </section>
-
-      {/* Features Section */}
-      <section className="grid md:grid-cols-3 gap-8">
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <div className="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center mb-4">
-            <svg className="w-6 h-6 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-            </svg>
-          </div>
-          <h3 className="text-xl font-semibold mb-2">Ikigai Method</h3>
-          <p className="text-gray-600">
-            Discover the intersection of what you love, what you're good at, what the world needs, and what you can be paid for.
-          </p>
-        </div>
-
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <div className="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center mb-4">
-            <svg className="w-6 h-6 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-            </svg>
-          </div>
-          <h3 className="text-xl font-semibold mb-2">Interactive Questionnaire</h3>
-          <p className="text-gray-600">
-            Answer engaging questions that help us understand your interests, skills, and career aspirations.
-          </p>
-        </div>
-
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <div className="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center mb-4">
-            <svg className="w-6 h-6 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-            </svg>
-          </div>
-          <h3 className="text-xl font-semibold mb-2">Personalized Results</h3>
-          <p className="text-gray-600">
-            Get detailed insights and recommendations based on your unique profile and the Ikigai framework.
-          </p>
-        </div>
-      </section>
+          {userProfile ? 'Continue Your Journey' : 'Start Your Journey'}
+        </button>
+      </div>
     </div>
   );
 };

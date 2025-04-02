@@ -1,115 +1,178 @@
-import { useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { careerData } from '../data/careerData';
 
 const Results = () => {
-  const location = useLocation();
-  const answers = location.state?.answers || {};
+  const [userProfile, setUserProfile] = useState(null);
+  const [answers, setAnswers] = useState(null);
+  const [userType, setUserType] = useState(null);
+  const navigate = useNavigate();
 
-  const analyzeAnswers = (answers) => {
-    // This is a simple analysis - in a real app, you'd want more sophisticated analysis
-    const recommendations = {
-      careers: [
-        "Software Developer",
-        "UX Designer",
-        "Data Analyst",
-        "Project Manager",
-        "Content Creator"
-      ],
-      strengths: [
-        "Problem Solving",
-        "Communication",
-        "Creativity",
-        "Leadership"
-      ],
-      areas: [
-        "Technology",
-        "Design",
-        "Business",
-        "Education"
-      ]
+  useEffect(() => {
+    const profile = JSON.parse(localStorage.getItem('userProfile'));
+    const questionnaireAnswers = JSON.parse(localStorage.getItem('questionnaireAnswers'));
+    const type = localStorage.getItem('userType');
+
+    console.log('Profile:', profile);
+    console.log('Answers:', questionnaireAnswers);
+    console.log('Type:', type);
+
+    if (!profile || !questionnaireAnswers || !type) {
+      console.log('Missing data:', { profile, questionnaireAnswers, type });
+      navigate('/');
+      return;
+    }
+
+    setUserProfile(profile);
+    setAnswers(questionnaireAnswers);
+    setUserType(type);
+  }, [navigate]);
+
+  const analyzeText = (text) => {
+    console.log('Analyzing text:', text);
+    const keywords = {
+      technology: ['technology', 'computer', 'software', 'programming', 'digital', 'coding', 'data', 'web', 'app', 'system'],
+      science: ['science', 'research', 'laboratory', 'experiment', 'analysis', 'chemistry', 'physics', 'biology', 'scientific'],
+      arts: ['art', 'design', 'creative', 'drawing', 'painting', 'music', 'dance', 'theater', 'photography', 'visual'],
+      business: ['business', 'management', 'marketing', 'finance', 'entrepreneur', 'startup', 'company', 'enterprise', 'commerce'],
+      healthcare: ['health', 'medical', 'healthcare', 'doctor', 'nurse', 'hospital', 'clinic', 'wellness', 'fitness', 'therapy'],
+      education: ['education', 'teaching', 'school', 'university', 'learning', 'academic', 'student', 'teacher', 'study'],
+      engineering: ['engineering', 'construction', 'mechanical', 'electrical', 'civil', 'architect', 'building', 'infrastructure'],
+      social: ['social', 'community', 'help', 'support', 'welfare', 'charity', 'nonprofit', 'volunteer', 'humanitarian'],
+      sports: ['sports', 'athlete', 'fitness', 'coach', 'game', 'team', 'sport', 'exercise', 'training', 'competition'],
+      law: ['law', 'legal', 'justice', 'court', 'attorney', 'lawyer', 'legislation', 'policy', 'regulation'],
+      media: ['media', 'journalism', 'news', 'broadcast', 'communication', 'press', 'reporter', 'content', 'digital media'],
+      agriculture: ['agriculture', 'farming', 'crop', 'farm', 'rural', 'food', 'sustainable', 'organic', 'agribusiness']
     };
 
+    const matches = {};
+    let totalMatches = 0;
+
+    Object.entries(keywords).forEach(([field, words]) => {
+      const count = words.filter(word => 
+        text.toLowerCase().includes(word.toLowerCase())
+      ).length;
+      
+      if (count > 0) {
+        matches[field] = count;
+        totalMatches += count;
+      }
+    });
+
+    // Convert to percentages
+    Object.keys(matches).forEach(field => {
+      matches[field] = (matches[field] / totalMatches) * 100;
+    });
+
+    console.log('Matches:', matches);
+    return matches;
+  };
+
+  const generateCareerRecommendations = (matches) => {
+    console.log('Generating recommendations from matches:', matches);
+    const recommendations = [];
+    const sortedFields = Object.entries(matches)
+      .sort(([, a], [, b]) => b - a)
+      .slice(0, 3);
+
+    sortedFields.forEach(([field, percentage]) => {
+      if (percentage > 0 && careerData[field]) {
+        recommendations.push({
+          field,
+          percentage,
+          careers: careerData[field]
+        });
+      }
+    });
+
+    console.log('Generated recommendations:', recommendations);
     return recommendations;
   };
 
-  const recommendations = analyzeAnswers(answers);
+  const generateFunResults = () => {
+    if (!answers) {
+      console.log('No answers available for fun results');
+      return null;
+    }
+
+    // Combine all answers into a single text for analysis
+    const combinedText = Object.values(answers)
+      .flat()
+      .join(' ');
+    
+    console.log('Combined text for fun results:', combinedText);
+    return generateCareerRecommendations(analyzeText(combinedText));
+  };
+
+  if (!userProfile || !answers || !userType) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-purple-50 to-indigo-50 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-gray-800 dark:text-white mb-4">Loading...</h1>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500 mx-auto"></div>
+        </div>
+      </div>
+    );
+  }
+
+  const recommendations = userType === 'ikigai' 
+    ? generateCareerRecommendations(analyzeText(Object.values(answers).flat().join(' ')))
+    : generateFunResults();
+
+  console.log('Final recommendations:', recommendations);
 
   return (
-    <div className="max-w-4xl mx-auto">
-      <div className="text-center mb-12">
-        <h1 className="text-4xl font-bold text-gray-900 mb-4">Your Career Path Analysis</h1>
-        <p className="text-xl text-gray-600">
-          Based on your responses, here's what we've discovered about your career potential
-        </p>
-      </div>
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-indigo-50 dark:from-gray-900 dark:to-gray-800 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-4xl mx-auto">
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+            Your Career Recommendations
+          </h1>
+          <p className="text-xl text-gray-600 dark:text-gray-300">
+            Based on your {userType === 'ikigai' ? 'Ikigai' : 'Fun'} questionnaire responses
+          </p>
+        </div>
 
-      {/* Ikigai Diagram */}
-      <div className="grid grid-cols-2 gap-4 mb-12">
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <h3 className="text-xl font-semibold mb-4 text-indigo-600">What You Love</h3>
-          <ul className="space-y-2">
-            {answers.passion?.map((item, index) => (
-              <li key={index} className="text-gray-700">• {item}</li>
+        {recommendations && recommendations.length > 0 ? (
+          <div className="space-y-8">
+            {recommendations.map((rec, index) => (
+              <div 
+                key={index}
+                className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 transform transition-all hover:scale-105"
+              >
+                <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4">
+                  {rec.field.charAt(0).toUpperCase() + rec.field.slice(1)} Careers
+                </h2>
+                <div className="space-y-4">
+                  {rec.careers.map((career, careerIndex) => (
+                    <div 
+                      key={careerIndex}
+                      className="border border-gray-200 dark:border-gray-700 rounded-lg p-4"
+                    >
+                      <h3 className="text-xl font-medium text-gray-900 dark:text-white mb-2">
+                        {career.title}
+                      </h3>
+                      <p className="text-gray-600 dark:text-gray-300 mb-2">
+                        {career.description}
+                      </p>
+                      <div className="text-sm text-gray-500 dark:text-gray-400">
+                        <p><span className="font-medium">Required Skills:</span> {career.skills}</p>
+                        <p><span className="font-medium">Education Level:</span> {career.education}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
             ))}
-          </ul>
-        </div>
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <h3 className="text-xl font-semibold mb-4 text-indigo-600">What You're Good At</h3>
-          <ul className="space-y-2">
-            {answers.skills?.map((item, index) => (
-              <li key={index} className="text-gray-700">• {item}</li>
-            ))}
-          </ul>
-        </div>
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <h3 className="text-xl font-semibold mb-4 text-indigo-600">What the World Needs</h3>
-          <ul className="space-y-2">
-            {answers.mission?.map((item, index) => (
-              <li key={index} className="text-gray-700">• {item}</li>
-            ))}
-          </ul>
-        </div>
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <h3 className="text-xl font-semibold mb-4 text-indigo-600">What You Can Be Paid For</h3>
-          <ul className="space-y-2">
-            {answers.profession?.map((item, index) => (
-              <li key={index} className="text-gray-700">• {item}</li>
-            ))}
-          </ul>
-        </div>
-      </div>
-
-      {/* Recommendations */}
-      <div className="bg-white p-8 rounded-lg shadow-md">
-        <h2 className="text-2xl font-bold mb-6">Recommended Career Paths</h2>
-        <div className="grid md:grid-cols-3 gap-6">
-          {recommendations.careers.map((career, index) => (
-            <div key={index} className="p-4 border border-gray-200 rounded-lg">
-              <h3 className="font-semibold text-lg mb-2">{career}</h3>
-              <p className="text-gray-600 text-sm">
-                Based on your interests and skills, this career path could be a great fit for you.
-              </p>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Next Steps */}
-      <div className="mt-12 bg-indigo-50 p-8 rounded-lg">
-        <h2 className="text-2xl font-bold mb-4">Next Steps</h2>
-        <div className="space-y-4">
-          <p className="text-gray-700">
-            1. Research the recommended career paths in detail
-          </p>
-          <p className="text-gray-700">
-            2. Connect with professionals in your areas of interest
-          </p>
-          <p className="text-gray-700">
-            3. Consider taking courses or certifications in your chosen field
-          </p>
-          <p className="text-gray-700">
-            4. Create a career development plan with specific goals
-          </p>
-        </div>
+          </div>
+        ) : (
+          <div className="text-center">
+            <p className="text-xl text-gray-600 dark:text-gray-300">
+              We couldn't generate specific recommendations based on your responses. 
+              Please try providing more detailed answers in the questionnaire.
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );
