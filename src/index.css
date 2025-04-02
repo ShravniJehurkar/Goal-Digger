@@ -3,12 +3,16 @@
 @tailwind utilities;
 
 @layer base {
-  body {
-    @apply bg-white text-gray-900 transition-colors duration-200;
+  :root {
+    @apply bg-white text-gray-900;
   }
 
-  .dark body {
-    @apply bg-dark text-white;
+  .dark {
+    @apply bg-gray-900 text-white;
+  }
+
+  body {
+    @apply transition-colors duration-200;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -17,5 +21,13 @@
 
   p {
     @apply text-gray-700 dark:text-gray-300;
+  }
+
+  a {
+    @apply text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400;
+  }
+
+  input, textarea, select {
+    @apply text-gray-900 dark:text-white bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600;
   }
 }
