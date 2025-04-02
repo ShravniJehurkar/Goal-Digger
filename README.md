@@ -72,4 +72,4 @@ Contributions, issues, and feature requests are welcome! Feel free to check [iss
 Shravni Jehurkar
 
 - GitHub: [@ShravniJehurkar](https://github.com/ShravniJehurkar)
-- LinkedIn: [Shravni Jehurkar](https://linkedin.com/in/yourusername)
+- LinkedIn: [@Shravni Jehurkar](https://linkedin.com/in/shravni-jehurkar)
