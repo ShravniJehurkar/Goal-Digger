@@ -90,35 +90,36 @@ const IkigaiQuestionnaire = () => {
   return (
     <div className="max-w-2xl mx-auto">
       <div className="mb-8">
-        <div className="h-2 bg-gray-200 rounded-full">
+        <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full">
           <div
             className="h-2 bg-indigo-600 rounded-full transition-all duration-300"
             style={{ width: `${progress}%` }}
           ></div>
         </div>
-        <p className="text-sm text-gray-600 mt-2">
+        <p className="text-sm text-gray-600 dark:text-gray-300 mt-2">
           Step {currentStep + 1} of {Object.keys(questions).length}
         </p>
       </div>
 
-      <div className="bg-white p-8 rounded-lg shadow-md">
-        <h2 className="text-2xl font-bold mb-6 text-center">
+      <div className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md">
+        <h2 className="text-2xl font-bold mb-6 text-center text-gray-900 dark:text-white">
           Discover Your Career Path with Ikigai 🎯
         </h2>
         
         <div className="space-y-6">
           {questions[currentCategory].map((question, index) => (
             <div key={index} className="space-y-4">
-              <p className="text-lg text-gray-700">{question}</p>
+              <p className="text-lg text-gray-700 dark:text-gray-200">{question}</p>
               <div className="relative">
                 <textarea
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                   rows="3"
                   placeholder="Type your answer here... (Maximum 50 words)"
+                  placeholderClassName="text-gray-500 dark:text-gray-400"
                   value={currentAnswers[index]}
                   onChange={(e) => handleAnswerChange(index, e.target.value)}
                 />
-                <div className="absolute bottom-2 right-2 text-sm text-gray-500">
+                <div className="absolute bottom-2 right-2 text-sm text-gray-500 dark:text-gray-400">
                   {wordCounts[index]}/50 words
                 </div>
               </div>
@@ -130,7 +131,7 @@ const IkigaiQuestionnaire = () => {
           {currentStep > 0 && (
             <button
               onClick={() => setCurrentStep(prev => prev - 1)}
-              className="px-4 py-2 text-gray-600 hover:text-indigo-600"
+              className="px-4 py-2 text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400"
             >
               Previous
             </button>

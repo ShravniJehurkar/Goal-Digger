@@ -15,35 +15,35 @@ const FunQuestionnaire = () => {
 
   const questions = {
     interests: [
-      "What's your favorite subject in school?",
-      "What do you like to do in your free time?",
-      "What kind of books or movies do you enjoy?",
-      "What's your dream job when you grow up?"
+      "What subjects do you enjoy the most in school?",
+      "What hobbies do you like to do in your free time?",
+      "What kind of books or movies do you like?",
+      "What would you like to learn more about?"
     ],
     personality: [
-      "Are you more of a team player or do you prefer working alone?",
-      "Do you like being in the spotlight or prefer to stay behind the scenes?",
-      "Are you more creative or analytical?",
-      "Do you prefer following rules or thinking outside the box?"
+      "How would you describe yourself?",
+      "What kind of people do you like to spend time with?",
+      "What makes you feel most comfortable?",
+      "How do you handle new situations?"
     ],
     activities: [
-      "What clubs or activities are you involved in at school?",
-      "What skills would you like to learn?",
-      "What kind of projects do you enjoy working on?",
-      "What makes you feel proud of yourself?"
+      "What activities do you enjoy doing with others?",
+      "What kind of games or sports do you like?",
+      "What creative activities do you enjoy?",
+      "What would you like to try someday?"
     ],
     future: [
-      "What kind of impact would you like to make in the world?",
-      "What problems would you like to solve when you grow up?",
-      "What kind of work environment do you think you'd enjoy?",
-      "What's something you're really good at that could help others?"
+      "What kind of job would you like to have when you grow up?",
+      "What places would you like to visit?",
+      "What skills would you like to learn?",
+      "What would make you feel successful?"
     ]
   };
 
   useEffect(() => {
     // Check if user profile exists and grade is appropriate
     const userProfile = JSON.parse(localStorage.getItem('userProfile'));
-    if (!userProfile || userProfile.grade < 6 || userProfile.grade > 10) {
+    if (!userProfile || userProfile.grade < 6 || userProfile.grade > 9) {
       navigate('/');
     }
   }, [navigate]);
@@ -90,35 +90,36 @@ const FunQuestionnaire = () => {
   return (
     <div className="max-w-2xl mx-auto">
       <div className="mb-8">
-        <div className="h-2 bg-gray-200 rounded-full">
+        <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full">
           <div
             className="h-2 bg-indigo-600 rounded-full transition-all duration-300"
             style={{ width: `${progress}%` }}
           ></div>
         </div>
-        <p className="text-sm text-gray-600 mt-2">
+        <p className="text-sm text-gray-600 dark:text-gray-300 mt-2">
           Step {currentStep + 1} of {Object.keys(questions).length}
         </p>
       </div>
 
-      <div className="bg-white p-8 rounded-lg shadow-md">
-        <h2 className="text-2xl font-bold mb-6 text-center">
+      <div className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md">
+        <h2 className="text-2xl font-bold mb-6 text-center text-gray-900 dark:text-white">
           Let's Discover Your Interests! 🌟
         </h2>
         
         <div className="space-y-6">
           {questions[currentCategory].map((question, index) => (
             <div key={index} className="space-y-4">
-              <p className="text-lg text-gray-700">{question}</p>
+              <p className="text-lg text-gray-700 dark:text-gray-200">{question}</p>
               <div className="relative">
                 <textarea
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                   rows="3"
                   placeholder="Type your answer here... (Maximum 50 words)"
+                  placeholderClassName="text-gray-500 dark:text-gray-400"
                   value={currentAnswers[index]}
                   onChange={(e) => handleAnswerChange(index, e.target.value)}
                 />
-                <div className="absolute bottom-2 right-2 text-sm text-gray-500">
+                <div className="absolute bottom-2 right-2 text-sm text-gray-500 dark:text-gray-400">
                   {wordCounts[index]}/50 words
                 </div>
               </div>
@@ -130,7 +131,7 @@ const FunQuestionnaire = () => {
           {currentStep > 0 && (
             <button
               onClick={() => setCurrentStep(prev => prev - 1)}
-              className="px-4 py-2 text-gray-600 hover:text-indigo-600"
+              className="px-4 py-2 text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400"
             >
               Previous
             </button>
