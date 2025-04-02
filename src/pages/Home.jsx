@@ -14,7 +14,7 @@ const Home = () => {
     if (!userProfile) {
       navigate('/profile');
     } else {
-      if (userProfile.grade >= 11) {
+      if (userProfile.grade >= 10) {
         navigate('/ikigai-questionnaire');
       } else if (userProfile.grade >= 6) {
         navigate('/fun-questionnaire');
@@ -38,7 +38,7 @@ const Home = () => {
       <div className="grid md:grid-cols-2 gap-8 mb-12">
         <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
           <h2 className="text-2xl font-semibold mb-4 text-indigo-600 dark:text-indigo-400">
-            For Students in 6th-10th Grade
+            For Students in 6th-9th Grade
           </h2>
           <p className="text-gray-600 dark:text-gray-300 mb-4">
             Take our fun and interactive questionnaire to explore your interests and discover potential career paths that match your personality and aspirations.
@@ -61,7 +61,7 @@ const Home = () => {
 
         <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
           <h2 className="text-2xl font-semibold mb-4 text-indigo-600 dark:text-indigo-400">
-            For Students in 11th Grade and Above
+            For Students in 10th-12th Grade
           </h2>
           <p className="text-gray-600 dark:text-gray-300 mb-4">
             Experience our comprehensive Ikigai-based questionnaire to find your perfect career path by exploring your passions, skills, mission, and profession.
