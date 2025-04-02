@@ -6,14 +6,14 @@ const Footer = () => {
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
-            <h3 className="text-xl font-bold mb-4">GOAL DIGGER</h3>
+            <h3 className="text-xl font-bold mb-4 text-white">GOAL DIGGER</h3>
             <p className="text-gray-400">
               Discover your perfect career path using the Ikigai method and unlock your true potential.
             </p>
           </div>
           
           <div>
-            <h4 className="text-lg font-semibold mb-4">Quick Links</h4>
+            <h4 className="text-lg font-semibold mb-4 text-white">Quick Links</h4>
             <ul className="space-y-2">
               <li>
                 <Link to="/" className="text-gray-400 hover:text-white transition-colors">
@@ -34,7 +34,7 @@ const Footer = () => {
           </div>
           
           <div>
-            <h4 className="text-lg font-semibold mb-4">Resources</h4>
+            <h4 className="text-lg font-semibold mb-4 text-white">Resources</h4>
             <ul className="space-y-2">
               <li>
                 <a href="#" className="text-gray-400 hover:text-white transition-colors">
@@ -55,7 +55,7 @@ const Footer = () => {
           </div>
           
           <div>
-            <h4 className="text-lg font-semibold mb-4">Contact</h4>
+            <h4 className="text-lg font-semibold mb-4 text-white">Contact</h4>
             <ul className="space-y-2">
               <li className="text-gray-400">
                 Email: support@goaldigger.com

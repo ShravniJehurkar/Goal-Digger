@@ -1,32 +1,27 @@
 import { Link } from 'react-router-dom';
+import ThemeToggle from './ThemeToggle';
 
 const Navbar = () => {
   return (
-    <nav className="bg-white shadow-lg">
+    <nav className="bg-white dark:bg-gray-800 shadow-md">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center h-16">
-          <Link to="/" className="flex items-center">
-            <span className="text-2xl font-bold text-indigo-600">GOAL DIGGER</span>
-          </Link>
-          
-          <div className="hidden md:flex space-x-8">
-            <Link to="/" className="text-gray-700 hover:text-indigo-600 transition-colors">
-              Home
-            </Link>
-            <Link to="/questionnaire" className="text-gray-700 hover:text-indigo-600 transition-colors">
-              Start Journey
-            </Link>
-            <Link to="/about" className="text-gray-700 hover:text-indigo-600 transition-colors">
-              About
+          <div className="flex items-center">
+            <Link to="/" className="text-2xl font-bold text-indigo-600 dark:text-indigo-400">
+              GOAL DIGGER
             </Link>
           </div>
-
-          <div className="md:hidden">
-            <button className="text-gray-700 hover:text-indigo-600 focus:outline-none">
-              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
-            </button>
+          <div className="flex items-center space-x-4">
+            <Link to="/" className="text-gray-700 dark:text-gray-200 hover:text-indigo-600 dark:hover:text-indigo-400">
+              Home
+            </Link>
+            <Link to="/about" className="text-gray-700 dark:text-gray-200 hover:text-indigo-600 dark:hover:text-indigo-400">
+              About
+            </Link>
+            <Link to="/profile" className="text-gray-700 dark:text-gray-200 hover:text-indigo-600 dark:hover:text-indigo-400">
+              Start Journey
+            </Link>
+            <ThemeToggle />
           </div>
         </div>
       </div>
