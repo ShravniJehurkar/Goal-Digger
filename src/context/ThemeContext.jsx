@@ -9,9 +9,17 @@ export const ThemeProvider = ({ children }) => {
   });
 
   useEffect(() => {
-    localStorage.setItem('theme', theme);
+    // Remove any existing theme classes
     document.documentElement.classList.remove('light', 'dark');
+    
+    // Add the current theme class
     document.documentElement.classList.add(theme);
+    
+    // Update localStorage
+    localStorage.setItem('theme', theme);
+    
+    // Force a reflow to ensure styles are applied
+    document.documentElement.offsetHeight;
   }, [theme]);
 
   const toggleTheme = (newTheme) => {
