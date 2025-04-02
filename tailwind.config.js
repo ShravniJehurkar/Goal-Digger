@@ -21,6 +21,22 @@ export default {
           900: '#0c4a6e',
         },
       },
+      backgroundColor: {
+        dark: '#1a1a1a',
+        light: '#ffffff',
+      },
+      textColor: {
+        dark: {
+          primary: '#ffffff',
+          secondary: '#a0aec0',
+          tertiary: '#718096',
+        },
+        light: {
+          primary: '#1a1a1a',
+          secondary: '#4a5568',
+          tertiary: '#718096',
+        },
+      },
     },
   },
   plugins: [],
