@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Open GOAL DIGGER</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f3f4f6;
+        }
+        .container {
+            text-align: center;
+            padding: 2rem;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            max-width: 600px;
+        }
+        h1 {
+            color: #4f46e5;
+            margin-bottom: 1rem;
+        }
+        .instructions {
+            margin-bottom: 2rem;
+            color: #4b5563;
+            text-align: left;
+        }
+        .button {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background-color: #4f46e5;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: background-color 0.2s;
+        }
+        .button:hover {
+            background-color: #4338ca;
+        }
+        .step {
+            margin-bottom: 1rem;
+            padding: 0.5rem;
+            background-color: #f8fafc;
+            border-radius: 4px;
+        }
+        .example {
+            color: #6b7280;
+            font-style: italic;
+            margin-left: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>GOAL DIGGER</h1>
+        <div class="instructions">
+            <p>Follow these steps to start the website:</p>
+            
+            <div class="step">
+                <strong>Step 1: Open Command Prompt</strong>
+                <ul>
+                    <li>Press the Windows key (⊞) on your keyboard</li>
+                    <li>Type "cmd" and press Enter</li>
+                </ul>
+            </div>
+
+            <div class="step">
+                <strong>Step 2: Find Your Project Folder</strong>
+                <ul>
+                    <li>Look for the folder named "goal-digger" on your computer</li>
+                    <li>It might be in your Desktop or Documents folder</li>
+                    <div class="example">Example: C:\Users\YourName\Desktop\goal-digger</div>
+                </ul>
+            </div>
+
+            <div class="step">
+                <strong>Step 3: Navigate to the Folder</strong>
+                <ul>
+                    <li>Type "cd" followed by the path to your folder</li>
+                    <li>Press Enter after typing the command</li>
+                    <div class="example">Example: cd C:\Users\YourName\Desktop\goal-digger</div>
+                </ul>
+            </div>
+
+            <div class="step">
+                <strong>Step 4: Start the Website</strong>
+                <ul>
+                    <li>Type "npm run dev" and press Enter</li>
+                    <li>Wait until you see a message saying the server is running</li>
+                </ul>
+            </div>
+
+            <div class="step">
+                <strong>Step 5: Open the Website</strong>
+                <ul>
+                    <li>Click the button below to open the website in your browser</li>
+                </ul>
+            </div>
+        </div>
+        <a href="http://localhost:3000" class="button" target="_blank" rel="noopener">Open Website</a>
+    </div>
+</body>
+</html> 
