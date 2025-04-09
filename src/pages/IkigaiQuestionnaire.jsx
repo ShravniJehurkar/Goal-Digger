@@ -70,17 +70,24 @@ const IkigaiQuestionnaire = () => {
 
   const handleNext = () => {
     const category = Object.keys(questions)[currentStep];
-    setAnswers(prev => ({
-      ...prev,
+    const updatedAnswers = {
+      ...answers,
       [category]: currentAnswers
-    }));
+    };
+    
+    console.log('Saving answers:', updatedAnswers);
+    setAnswers(updatedAnswers);
 
     if (currentStep < Object.keys(questions).length - 1) {
       setCurrentStep(prev => prev + 1);
       setCurrentAnswers(['', '', '', '']);
       setWordCounts([0, 0, 0, 0]);
     } else {
-      navigate('/results', { state: { answers, type: 'ikigai' } });
+      // Save answers to localStorage before navigation
+      localStorage.setItem('questionnaireAnswers', JSON.stringify(updatedAnswers));
+      localStorage.setItem('userType', 'ikigai');
+      console.log('Final answers saved:', updatedAnswers);
+      navigate('/results');
     }
   };
 
