@@ -12,14 +12,24 @@ const UserProfile = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Store profile data in localStorage for later use
-    localStorage.setItem('userProfile', JSON.stringify(profile));
-    // Navigate to appropriate questionnaire based on grade
+
     const gradeNum = parseInt(profile.grade);
-    if (gradeNum >= 6 && gradeNum <= 10) {
+
+    // Save profile with numeric grade
+    const updatedProfile = {
+      ...profile,
+      grade: gradeNum
+    };
+
+    localStorage.setItem('userProfile', JSON.stringify(updatedProfile));
+
+    // Navigate based on grade
+    if (gradeNum >= 6 && gradeNum <= 9) {
       navigate('/fun-questionnaire');
-    } else {
+    } else if (gradeNum >= 10 && gradeNum <= 12) {
       navigate('/ikigai-questionnaire');
+    } else {
+      navigate('/');
     }
   };
 
@@ -54,7 +64,6 @@ const UserProfile = () => {
             <option value="10">10th Grade</option>
             <option value="11">11th Grade</option>
             <option value="12">12th Grade</option>
-            <option value="college">College</option>
           </select>
         </div>
 
@@ -98,4 +107,4 @@ const UserProfile = () => {
   );
 };
 
-export default UserProfile; 
+export default UserProfile;
