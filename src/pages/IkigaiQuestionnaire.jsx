@@ -28,7 +28,7 @@ const IkigaiQuestionnaire = () => {
     ],
     mission: [
       "What problems in the world do you feel most passionate about solving?",
-      "What causes or movements do you feel strongly about?",
+      "What causes do you feel strongly about?",
       "How would you like to make a difference in the world?",
       "What social or environmental issues concern you the most?"
     ],
@@ -41,10 +41,14 @@ const IkigaiQuestionnaire = () => {
   };
 
   useEffect(() => {
-    // Check if user profile exists and grade is appropriate
     const userProfile = JSON.parse(localStorage.getItem('userProfile'));
-    if (!userProfile || userProfile.grade < 11) {
+    if (!userProfile || !userProfile.grade) {
       navigate('/');
+    } else {
+      const grade = parseInt(userProfile.grade);
+      if (grade < 10 || grade > 12) {
+        navigate('/');
+      }
     }
   }, [navigate]);
 
@@ -74,7 +78,7 @@ const IkigaiQuestionnaire = () => {
       ...answers,
       [category]: currentAnswers
     };
-    
+
     console.log('Saving answers:', updatedAnswers);
     setAnswers(updatedAnswers);
 
@@ -83,7 +87,6 @@ const IkigaiQuestionnaire = () => {
       setCurrentAnswers(['', '', '', '']);
       setWordCounts([0, 0, 0, 0]);
     } else {
-      // Save answers to localStorage before navigation
       localStorage.setItem('questionnaireAnswers', JSON.stringify(updatedAnswers));
       localStorage.setItem('userType', 'ikigai');
       console.log('Final answers saved:', updatedAnswers);
@@ -112,7 +115,7 @@ const IkigaiQuestionnaire = () => {
         <h2 className="text-2xl font-bold mb-6 text-center text-gray-900 dark:text-white">
           Discover Your Career Path with Ikigai 🎯
         </h2>
-        
+
         <div className="space-y-6">
           {questions[currentCategory].map((question, index) => (
             <div key={index} className="space-y-4">
@@ -122,7 +125,6 @@ const IkigaiQuestionnaire = () => {
                   className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                   rows="3"
                   placeholder="Type your answer here... (Maximum 50 words)"
-                  placeholderClassName="text-gray-500 dark:text-gray-400"
                   value={currentAnswers[index]}
                   onChange={(e) => handleAnswerChange(index, e.target.value)}
                 />
@@ -155,4 +157,4 @@ const IkigaiQuestionnaire = () => {
   );
 };
 
-export default IkigaiQuestionnaire; 
+export default IkigaiQuestionnaire;
