@@ -61,7 +61,7 @@ const Footer = () => {
                 Email: shravni.j27@gmail.com
               </li>
               <li className="text-gray-400">
-                Phone:+91 9175407463
+                Phone:+91 9175407463 {/* trigger redeploy fix */}
               </li>
               <li className="text-gray-400">
                 Address: Chhatrapati Sambhaji Nagar, Maharashtra, India
