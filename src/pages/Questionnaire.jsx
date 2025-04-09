@@ -26,7 +26,7 @@ const Questionnaire = () => {
     ],
     mission: [
       "What problems in the world do you feel most passionate about solving?",
-      "What causes or movements do you feel strongly about?",
+      "What causes do you feel strongly about?",
       "How would you like to make a difference in the world?",
       "What social or environmental issues concern you the most?"
     ],

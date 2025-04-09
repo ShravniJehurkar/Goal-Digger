@@ -12,7 +12,15 @@ const UserProfile = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     localStorage.setItem('userProfile', JSON.stringify(formData));
-    navigate('/');
+
+    const grade = parseInt(formData.grade);
+    if (grade >= 6 && grade <= 9) {
+      navigate('/fun-questionnaire');
+    } else if (grade >= 10 && grade <= 12) {
+      navigate('/ikigai');
+    } else {
+      navigate('/'); // fallback
+    }
   };
 
   const handleChange = (e) => {
@@ -107,4 +115,4 @@ const UserProfile = () => {
   );
 };
 
-export default UserProfile; 
+export default UserProfile;
