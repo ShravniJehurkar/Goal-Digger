@@ -179,7 +179,7 @@ export default function Questionnaire() {
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-violet-50 via-white to-fuchsia-50">
       <Navbar />
 
-      <main className="flex-1 pt-36 pb-16">
+      <main className="flex-1 pt-48 pb-16">
         <div className="mx-auto w-full max-w-5xl px-5 sm:px-8">
           {/* Heading */}
           <motion.div
