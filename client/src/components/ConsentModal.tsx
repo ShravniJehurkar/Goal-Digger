@@ -27,7 +27,6 @@ export default function ConsentModal({
   const [age18Plus, setAge18Plus] = useState(false);
 
   const handleConsent = () => {
-    // Store consent in sessionStorage
     sessionStorage.setItem("userConsent", "true");
     onConsent();
   };
@@ -43,20 +42,33 @@ export default function ConsentModal({
         }
       }}
     >
-      <DialogContent className="sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle className="flex items-center text-lg font-semibold gap-2">
-            <AlertTriangle className="h-5 w-5 text-orange-500" />
+      <DialogContent
+        className="
+          sm:max-w-lg
+          rounded-2xl
+          border border-violet-200
+          bg-white
+          p-6
+          text-slate-900
+          shadow-2xl
+        "
+      >
+        <DialogHeader className="space-y-3 text-left">
+          <DialogTitle className="flex items-center gap-2 text-xl font-bold text-slate-900">
+            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-orange-100">
+              <AlertTriangle className="h-5 w-5 text-orange-500" />
+            </span>
             Age Verification Required
           </DialogTitle>
-          <DialogDescription>
+
+          <DialogDescription className="text-sm leading-6 text-slate-600">
             Before using our career guidance tool, please confirm your age and
             consent.
           </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-4 pt-4">
-          <div className="bg-orange-50 p-4 rounded-md text-orange-800 text-sm">
+        <div className="space-y-5 pt-2">
+          <div className="rounded-xl border border-orange-200 bg-orange-50 p-4 text-sm leading-6 text-orange-900">
             <p>
               This tool uses your personal preferences and background to provide
               career recommendations. We want to ensure you're old enough to use
@@ -64,69 +76,95 @@ export default function ConsentModal({
             </p>
           </div>
 
-          <div className="space-y-3">
-            <div className="flex items-start space-x-2">
+          <div className="space-y-4">
+            <label
+              htmlFor="age18"
+              className="flex cursor-pointer items-start gap-3"
+            >
               <Checkbox
                 id="age18"
                 checked={age18Plus}
                 onCheckedChange={(checked) => {
-                  setAge18Plus(checked as boolean);
-                  if (checked) {
+                  const value = checked === true;
+                  setAge18Plus(value);
+
+                  if (value) {
                     setGuardianConsent(false);
                   }
                 }}
+                className="mt-0.5"
               />
-              <label
-                htmlFor="age18"
-                className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                I confirm that I am 18 years of age or older
-              </label>
-            </div>
 
-            <div className="flex items-start space-x-2">
+              <span className="text-sm leading-5 text-slate-700">
+                I confirm that I am 18 years of age or older.
+              </span>
+            </label>
+
+            <label
+              htmlFor="guardian"
+              className="flex cursor-pointer items-start gap-3"
+            >
               <Checkbox
                 id="guardian"
                 checked={guardianConsent}
                 onCheckedChange={(checked) => {
-                  setGuardianConsent(checked as boolean);
-                  if (checked) {
+                  const value = checked === true;
+                  setGuardianConsent(value);
+
+                  if (value) {
                     setAge18Plus(false);
                   }
                 }}
+                className="mt-0.5"
               />
-              <label
-                htmlFor="guardian"
-                className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                I am under 18 but have guardian consent to use this service
-              </label>
-            </div>
 
-            <div className="flex items-start space-x-2 pt-2">
+              <span className="text-sm leading-5 text-slate-700">
+                I am under 18 but have guardian consent to use this service.
+              </span>
+            </label>
+
+            <label
+              htmlFor="terms"
+              className="flex cursor-pointer items-start gap-3 border-t border-slate-100 pt-4"
+            >
               <Checkbox
                 id="terms"
                 checked={agreed}
-                onCheckedChange={(checked) => setAgreed(checked as boolean)}
+                onCheckedChange={(checked) => {
+                  setAgreed(checked === true);
+                }}
+                className="mt-0.5"
               />
-              <label
-                htmlFor="terms"
-                className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
+
+              <span className="text-sm leading-5 text-slate-700">
                 I understand and agree that this tool will collect my responses
                 to provide personalized career recommendations. My data is
                 processed in accordance with the privacy policy.
-              </label>
-            </div>
+              </span>
+            </label>
           </div>
         </div>
 
-        <DialogFooter className="flex space-x-2 sm:justify-end">
+        <DialogFooter className="mt-2">
           <Button
-            type="submit"
+            type="button"
             disabled={!canSubmit}
             onClick={handleConsent}
-            className="bg-gradient-to-r from-violet-600 to-indigo-600 text-white"
+            className="
+              w-full
+              rounded-xl
+              bg-gradient-to-r
+              from-violet-600
+              to-indigo-600
+              text-white
+              shadow-md
+              transition-all
+              hover:from-violet-700
+              hover:to-indigo-700
+              disabled:cursor-not-allowed
+              disabled:opacity-40
+              sm:w-auto
+            "
           >
             Continue
           </Button>
