@@ -38,8 +38,8 @@ export default function Questionnaire() {
   const categories = [
     "passion",
     "mission",
-    "vocation",
     "profession",
+    "vocation",
     "personality",
   ];
 
@@ -176,16 +176,16 @@ export default function Questionnaire() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-violet-50 via-white to-fuchsia-50">
+    <div className="h-screen overflow-hidden flex flex-col bg-gradient-to-br from-violet-50 via-white to-fuchsia-50">
       <Navbar />
 
-      <main className="flex-1 pt-48 pb-16">
+      <main className="flex-1 overflow-hidden pt-24 pb-4">
         <div className="mx-auto w-full max-w-5xl px-5 sm:px-8">
           {/* Heading */}
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mb-10 text-center"
+            className="mb-3 text-center"
           >
             <div className="mb-3 flex items-center justify-center gap-2">
               <Sparkles className="h-5 w-5 text-violet-500" />
@@ -212,7 +212,7 @@ export default function Questionnaire() {
           </motion.div>
 
           {/* Progress */}
-          <div className="mb-10">
+          <div className="mb-4">
             <div className="relative flex items-start justify-between">
               {/* Connecting line */}
               <div className="absolute left-[10%] right-[10%] top-6 h-1 rounded-full bg-violet-100" />
@@ -270,7 +270,7 @@ export default function Questionnaire() {
             </div>
 
             {/* Progress bar */}
-            <div className="mt-8 h-1.5 overflow-hidden rounded-full bg-violet-100">
+            <div className="mt-5 h-1.5 overflow-hidden rounded-full bg-violet-100">
               <motion.div
                 className="h-full rounded-full bg-gradient-to-r from-violet-600 to-fuchsia-500"
                 initial={{ width: 0 }}
@@ -296,10 +296,10 @@ export default function Questionnaire() {
                 rounded-3xl
                 border border-violet-100
                 bg-white/80
-                p-7
+                p-5
                 shadow-[0_20px_60px_rgba(124,58,237,0.10)]
                 backdrop-blur-xl
-                sm:p-10
+                sm:p-6
               "
             >
               <div className="mb-8">
@@ -307,7 +307,7 @@ export default function Questionnaire() {
                   {getCategoryName(currentCategory)}
                 </div>
 
-                <h2 className="text-2xl font-bold leading-tight text-slate-900 sm:text-3xl">
+                <h2 className="text-xl font-bold leading-tight text-slate-900 sm:text-2xl">
                   {currentQuestion.question}
                 </h2>
 
@@ -362,7 +362,7 @@ export default function Questionnaire() {
           </AnimatePresence>
 
           {/* Navigation */}
-          <div className="mt-8 flex items-center justify-between">
+          <div className="mt-4 flex items-center justify-between">
             <Button
               variant="outline"
               onClick={handlePrevious}
