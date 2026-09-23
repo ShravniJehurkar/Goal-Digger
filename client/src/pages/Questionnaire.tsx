@@ -1,10 +1,13 @@
-import { useState, useEffect } from 'react';
-import { useLocation } from 'wouter';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Card } from '@/components/ui/card';
-import { Progress } from '@/components/ui/progress';
-import { Button } from '@/components/ui/button';
-import { Check, ArrowLeft, ArrowRight } from 'lucide-react';
+import { useState, useEffect } from "react";
+import { useLocation } from "wouter";
+import { motion, AnimatePresence } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import {
+  Check,
+  ArrowLeft,
+  ArrowRight,
+  Sparkles,
+} from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -13,260 +16,410 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useToast } from '@/hooks/use-toast';
-import { apiRequest } from '@/lib/queryClient';
-import { questions } from '@/lib/questions';
-import Navbar from '@/components/Navbar';
+import { useToast } from "@/hooks/use-toast";
+import { apiRequest } from "@/lib/queryClient";
+import { questions } from "@/lib/questions";
+import Navbar from "@/components/Navbar";
 
 export default function Questionnaire() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [userResponses, setUserResponses] = useState<Record<number, number>>({});
+  const [userResponses, setUserResponses] = useState<Record<number, number>>(
+    {},
+  );
   const [isAnswerSelected, setIsAnswerSelected] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
   const { toast } = useToast();
   const [, setLocation] = useLocation();
-  
+
   const currentQuestion = questions[currentQuestionIndex];
   const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
-  
-  // Get all categories in the right order for steps
-  const categories = ["passion", "mission", "vocation", "profession", "personality"];
-  const questionCategories = questions.map(q => q.category);
+
+  const categories = [
+    "passion",
+    "mission",
+    "vocation",
+    "profession",
+    "personality",
+  ];
+
   const currentCategory = currentQuestion.category;
-  
-  // Calculate which step we're on for each category
-  const categorySteps: Record<string, { total: number, current: number }> = {};
-  categories.forEach(category => {
-    const categoryQuestions = questions.filter(q => q.category === category);
-    const answered = categoryQuestions.filter(q => userResponses[q.id] !== undefined).length;
-    categorySteps[category] = {
-      total: categoryQuestions.length,
-      current: answered
-    };
-  });
-  
-  // Check which categories are complete
+
   const getCategoryStatus = (category: string) => {
     if (category === currentCategory) return "active";
-    const categoryQuestions = questions.filter(q => q.category === category);
-    const categoryQuestionsIds = categoryQuestions.map(q => q.id);
-    const answeredAll = categoryQuestionsIds.every(id => userResponses[id] !== undefined);
+
+    const categoryQuestions = questions.filter(
+      (q) => q.category === category,
+    );
+
+    const answeredAll = categoryQuestions.every(
+      (q) => userResponses[q.id] !== undefined,
+    );
+
     if (answeredAll) return "completed";
-    const answeredAny = categoryQuestionsIds.some(id => userResponses[id] !== undefined);
+
+    const answeredAny = categoryQuestions.some(
+      (q) => userResponses[q.id] !== undefined,
+    );
+
     if (answeredAny) return "in-progress";
+
     return "inactive";
   };
-  
+
+  const getCategoryName = (category: string) => {
+    const names: Record<string, string> = {
+      passion: "Passion",
+      mission: "Mission",
+      vocation: "Vocation",
+      profession: "Profession",
+      personality: "Personality",
+    };
+
+    return names[category] || category;
+  };
+
   useEffect(() => {
-    // Check if current question is already answered
-    if (userResponses[currentQuestion.id] !== undefined) {
-      setIsAnswerSelected(true);
-    } else {
-      setIsAnswerSelected(false);
-    }
+    setIsAnswerSelected(
+      userResponses[currentQuestion.id] !== undefined,
+    );
   }, [currentQuestionIndex, userResponses, currentQuestion.id]);
 
   const handleOptionSelect = (optionIndex: string) => {
-    setUserResponses(prev => ({
+    setUserResponses((prev) => ({
       ...prev,
-      [currentQuestion.id]: parseInt(optionIndex)
+      [currentQuestion.id]: parseInt(optionIndex),
     }));
+
     setIsAnswerSelected(true);
   };
-  
+
   const handlePrevious = () => {
     if (currentQuestionIndex > 0) {
-      setCurrentQuestionIndex(prev => prev - 1);
+      setCurrentQuestionIndex((prev) => prev - 1);
     }
   };
-  
+
   const handleNext = () => {
     if (currentQuestionIndex < questions.length - 1) {
-      setCurrentQuestionIndex(prev => prev + 1);
+      setCurrentQuestionIndex((prev) => prev + 1);
     } else {
       handleSubmit();
     }
   };
-  
+
   const handleSubmit = async () => {
-    // Check if all questions are answered
     if (Object.keys(userResponses).length < questions.length) {
-      // Find unanswered questions
-      const unanswered = questions.filter(q => userResponses[q.id] === undefined);
-      
-      // Get unique categories without using Set
+      const unanswered = questions.filter(
+        (q) => userResponses[q.id] === undefined,
+      );
+
       const unansweredCategories: string[] = [];
-      unanswered.forEach(q => {
+
+      unanswered.forEach((q) => {
         if (!unansweredCategories.includes(q.category)) {
           unansweredCategories.push(q.category);
         }
       });
-      
+
       toast({
         title: "Please answer all questions",
-        description: `You still have unanswered questions in these categories: ${unansweredCategories.join(", ")}.`,
-        variant: "destructive"
+        description: `You still have unanswered questions in these categories: ${unansweredCategories.join(
+          ", ",
+        )}.`,
+        variant: "destructive",
       });
+
       return;
     }
-    
+
     try {
       setIsSubmitting(true);
-      
-      // Converting responses to expected format
+
       const responses: Record<string, number> = {};
+
       Object.entries(userResponses).forEach(([key, value]) => {
         responses[key] = value;
       });
-      
-      // You would submit to your backend here
-      const res = await apiRequest('POST', '/api/ikigai-profile', { responses });
+
+      const res = await apiRequest(
+        "POST",
+        "/api/ikigai-profile",
+        { responses },
+      );
+
       const data = await res.json();
-      
-      // Store results in sessionStorage for the results page
-      sessionStorage.setItem('ikigaiResults', JSON.stringify(data));
-      // Also store user responses for potential ML processing
-      sessionStorage.setItem('userResponses', JSON.stringify(responses));
-      
-      // Redirect to results page
-      setLocation('/results');
+
+      sessionStorage.setItem(
+        "ikigaiResults",
+        JSON.stringify(data),
+      );
+
+      sessionStorage.setItem(
+        "userResponses",
+        JSON.stringify(responses),
+      );
+
+      setLocation("/results");
     } catch (error) {
       toast({
         title: "Error",
-        description: "Failed to process your answers. Please try again.",
-        variant: "destructive"
+        description:
+          "Failed to process your answers. Please try again.",
+        variant: "destructive",
       });
+
       console.error("Error submitting responses:", error);
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  // Get a user-friendly category name
-  const getCategoryName = (category: string) => {
-    const names: Record<string, string> = {
-      passion: "Passion",
-      mission: "Mission",
-      vocation: "Vocation", 
-      profession: "Profession",
-      personality: "Personality"
-    };
-    return names[category] || category;
-  };
-
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-violet-50 via-white to-fuchsia-50">
       <Navbar />
-      
-      <section className="flex-grow py-20">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl mx-auto">
-            {/* Section Title */}
-            <div className="text-center mb-8">
-              <h2 className="text-2xl md:text-3xl font-bold text-gray-800">
-                Answer these questions thoughtfully to discover where your ikigai lies.
-              </h2>
+
+      <main className="flex-1 pt-36 pb-16">
+        <div className="mx-auto w-full max-w-5xl px-5 sm:px-8">
+          {/* Heading */}
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-10 text-center"
+          >
+            <div className="mb-3 flex items-center justify-center gap-2">
+              <Sparkles className="h-5 w-5 text-violet-500" />
+
+              <span className="text-sm font-semibold uppercase tracking-[0.2em] text-violet-600">
+                Self Discovery
+              </span>
+
+              <Sparkles className="h-5 w-5 text-fuchsia-500" />
             </div>
-            
-            {/* Progress Steps */}
-            <div className="mb-12">
-              <div className="flex justify-between items-center">
-                {categories.map((category, index) => {
-                  const status = getCategoryStatus(category);
-                  return (
-                    <div key={index} className="flex flex-col items-center">
-                      <div className={`ikigai-step ${
-                        status === "active" ? "active" :
-                        status === "completed" ? "completed" : "inactive"
-                      }`}>
-                        {status === "completed" ? (
-                          <Check className="h-5 w-5" />
-                        ) : (
-                          index + 1
-                        )}
-                      </div>
-                      <span className="text-sm mt-2 text-gray-600">
-                        {getCategoryName(category)}
-                      </span>
-                    </div>
-                  );
-                })}
-              </div>
-              <div className="h-1 bg-gray-200 mt-6 rounded-full">
-                <div 
-                  className="h-full rounded-full bg-gradient-to-r from-violet-600 to-fuchsia-500 transition-all duration-300"
-                  style={{ width: `${progress}%` }}
-                ></div>
-              </div>
-            </div>
-            
-            {/* Question Container */}
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={currentQuestionIndex}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.3 }}
-                className="bg-white shadow-md rounded-xl p-8 mb-8"
-              >
-                <div className="mb-8">
-                  <div className="mb-6">
-                    <h3 className="font-bold text-xl md:text-2xl text-gray-800 mb-2">
-                      {currentQuestion.question}
-                    </h3>
-                    {currentQuestion.subtext && (
-                      <p className="text-gray-600 mb-6">{currentQuestion.subtext}</p>
-                    )}
-                  </div>
-                  
-                  <Select
-                    value={userResponses[currentQuestion.id]?.toString()}
-                    onValueChange={handleOptionSelect}
+
+            <h1 className="mx-auto max-w-3xl text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+              Discover where your{" "}
+              <span className="bg-gradient-to-r from-violet-600 to-fuchsia-500 bg-clip-text text-transparent">
+                Ikigai
+              </span>{" "}
+              lies.
+            </h1>
+
+            <p className="mx-auto mt-3 max-w-2xl text-base leading-7 text-slate-600">
+              Answer these questions thoughtfully to understand your
+              passions, strengths, purpose, and direction.
+            </p>
+          </motion.div>
+
+          {/* Progress */}
+          <div className="mb-10">
+            <div className="relative flex items-start justify-between">
+              {/* Connecting line */}
+              <div className="absolute left-[10%] right-[10%] top-6 h-1 rounded-full bg-violet-100" />
+
+              <div
+                className="absolute left-[10%] top-6 h-1 rounded-full bg-gradient-to-r from-violet-600 to-fuchsia-500 transition-all duration-500"
+                style={{
+                  width: `${Math.max(0, progress - 10) * 0.8}%`,
+                }}
+              />
+
+              {categories.map((category, index) => {
+                const status = getCategoryStatus(category);
+
+                return (
+                  <div
+                    key={category}
+                    className="relative z-10 flex w-1/5 flex-col items-center"
                   >
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Select an option" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        {currentQuestion.options.map((option, index) => (
-                          <SelectItem key={index} value={index.toString()}>
-                            {option}
-                          </SelectItem>
-                        ))}
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </motion.div>
-            </AnimatePresence>
-            
-            {/* Navigation Buttons */}
-            <div className="flex justify-between">
-              <Button
-                variant="outline"
-                onClick={handlePrevious}
-                disabled={currentQuestionIndex === 0}
-                className="px-6 py-2 rounded-full font-medium"
-              >
-                <ArrowLeft className="mr-2 h-4 w-4" /> Previous
-              </Button>
-              
-              <Button
-                onClick={handleNext}
-                disabled={!isAnswerSelected || isSubmitting}
-                className="rounded-full px-7 bg-gradient-to-r from-violet-600 to-fuchsia-500 text-white hover:from-violet-700 hover:to-fuchsia-600 shadow-md hover:shadow-lg transition-all duration-300"
-              >
-                {currentQuestionIndex === questions.length - 1 ? (
-                  isSubmitting ? 'Processing...' : 'See Results'
-                ) : (
-                  <>Next <ArrowRight className="ml-2 h-4 w-4" /></>
-                )}
-              </Button>
+                    <div
+                      className={`
+                        flex h-12 w-12 items-center justify-center rounded-full
+                        border-2 font-semibold transition-all duration-300
+                        ${
+                          status === "active"
+                            ? "border-violet-500 bg-gradient-to-br from-violet-600 to-fuchsia-500 text-white shadow-lg shadow-violet-200"
+                            : status === "completed"
+                              ? "border-violet-500 bg-violet-100 text-violet-700"
+                              : "border-violet-100 bg-white text-slate-400 shadow-sm"
+                        }
+                      `}
+                    >
+                      {status === "completed" ? (
+                        <Check className="h-5 w-5" />
+                      ) : (
+                        index + 1
+                      )}
+                    </div>
+
+                    <span
+                      className={`
+                        mt-3 text-xs font-medium sm:text-sm
+                        ${
+                          status === "active"
+                            ? "text-violet-700"
+                            : "text-slate-500"
+                        }
+                      `}
+                    >
+                      {getCategoryName(category)}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Progress bar */}
+            <div className="mt-8 h-1.5 overflow-hidden rounded-full bg-violet-100">
+              <motion.div
+                className="h-full rounded-full bg-gradient-to-r from-violet-600 to-fuchsia-500"
+                initial={{ width: 0 }}
+                animate={{ width: `${progress}%` }}
+                transition={{ duration: 0.4 }}
+              />
+            </div>
+
+            <div className="mt-2 text-right text-xs font-medium text-violet-600">
+              {currentQuestionIndex + 1} of {questions.length}
             </div>
           </div>
+
+          {/* Question */}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentQuestionIndex}
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.3 }}
+              className="
+                rounded-3xl
+                border border-violet-100
+                bg-white/80
+                p-7
+                shadow-[0_20px_60px_rgba(124,58,237,0.10)]
+                backdrop-blur-xl
+                sm:p-10
+              "
+            >
+              <div className="mb-8">
+                <div className="mb-2 text-sm font-semibold text-violet-600">
+                  {getCategoryName(currentCategory)}
+                </div>
+
+                <h2 className="text-2xl font-bold leading-tight text-slate-900 sm:text-3xl">
+                  {currentQuestion.question}
+                </h2>
+
+                {currentQuestion.subtext && (
+                  <p className="mt-3 text-base leading-7 text-slate-600">
+                    {currentQuestion.subtext}
+                  </p>
+                )}
+              </div>
+
+              <Select
+                value={
+                  userResponses[currentQuestion.id]?.toString()
+                }
+                onValueChange={handleOptionSelect}
+              >
+                <SelectTrigger
+                  className="
+                    h-14
+                    w-full
+                    rounded-xl
+                    border-violet-200
+                    bg-white
+                    px-5
+                    text-left
+                    text-slate-700
+                    shadow-sm
+                    transition-all
+                    hover:border-violet-400
+                    focus:ring-2
+                    focus:ring-violet-200
+                  "
+                >
+                  <SelectValue placeholder="Select an option" />
+                </SelectTrigger>
+
+                <SelectContent className="rounded-xl border-violet-100 bg-white shadow-xl">
+                  <SelectGroup>
+                    {currentQuestion.options.map((option, index) => (
+                      <SelectItem
+                        key={index}
+                        value={index.toString()}
+                        className="cursor-pointer rounded-lg py-3 text-slate-700 focus:bg-violet-50 focus:text-violet-700"
+                      >
+                        {option}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </motion.div>
+          </AnimatePresence>
+
+          {/* Navigation */}
+          <div className="mt-8 flex items-center justify-between">
+            <Button
+              variant="outline"
+              onClick={handlePrevious}
+              disabled={currentQuestionIndex === 0}
+              className="
+                rounded-full
+                border-violet-200
+                bg-white/80
+                px-6
+                text-slate-600
+                shadow-sm
+                hover:border-violet-300
+                hover:bg-violet-50
+                hover:text-violet-700
+              "
+            >
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Previous
+            </Button>
+
+            <Button
+              onClick={handleNext}
+              disabled={!isAnswerSelected || isSubmitting}
+              className="
+                rounded-full
+                bg-gradient-to-r
+                from-violet-600
+                to-fuchsia-500
+                px-7
+                text-white
+                shadow-lg
+                shadow-violet-200
+                transition-all
+                duration-300
+                hover:from-violet-700
+                hover:to-fuchsia-600
+                hover:shadow-xl
+                disabled:cursor-not-allowed
+                disabled:opacity-40
+              "
+            >
+              {currentQuestionIndex === questions.length - 1 ? (
+                isSubmitting ? (
+                  "Processing..."
+                ) : (
+                  "See Results"
+                )
+              ) : (
+                <>
+                  Next
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </>
+              )}
+            </Button>
+          </div>
         </div>
-      </section>
+      </main>
     </div>
   );
 }
