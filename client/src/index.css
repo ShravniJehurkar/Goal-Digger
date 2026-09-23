@@ -1,0 +1,115 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-background text-foreground;
+  }
+
+  :root {
+    --deep-purple: 262 83% 58%;
+    --violet: 270 85% 62%;
+    --soft-purple: 260 75% 72%;
+    --lavender: 250 80% 94%;
+  }
+
+  @keyframes gradient {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+  .gradient-bg {
+    background: linear-gradient(
+      -45deg,
+      hsl(var(--deep-purple)),
+      hsl(var(--violet)),
+      hsl(var(--soft-purple)),
+      hsl(var(--lavender))
+    );
+    background-size: 400% 400%;
+    animation: gradient 15s ease infinite;
+  }
+  .hero-gradient {
+    background:
+      radial-gradient(
+        circle at 15% 20%,
+        rgba(196, 181, 253, 0.45),
+        transparent 35%
+      ),
+      radial-gradient(
+        circle at 85% 70%,
+        rgba(217, 180, 255, 0.35),
+        transparent 40%
+      ),
+      linear-gradient(135deg, #f8f5ff 0%, #eee8ff 45%, #e4dcff 100%);
+  }
+
+  .success-gradient {
+    background: linear-gradient(135deg, #7c3aed, #a855f7, #d946ef);
+  }
+
+  .btn-glow:hover {
+    box-shadow: 0 0 24px rgba(168, 85, 247, 0.45);
+    transform: translateY(-1px) scale(1.03);
+    transition: all 0.3s ease;
+  }
+
+  .section-appear {
+    opacity: 0;
+    transform: translateY(20px);
+    transition:
+      opacity 0.8s ease,
+      transform 0.8s ease;
+  }
+
+  .section-appear.active {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .question-appear {
+    opacity: 0;
+    transform: translateX(-20px);
+    transition:
+      opacity 0.6s ease,
+      transform 0.6s ease;
+  }
+
+  .question-appear.active {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .ikigai-step {
+    @apply w-12 h-12 rounded-full flex items-center justify-center font-semibold text-lg border-2;
+  }
+
+  .ikigai-step.active {
+    @apply bg-primary text-white border-primary;
+  }
+
+  .ikigai-step.completed {
+    @apply bg-primary text-white border-primary;
+  }
+
+  .ikigai-step.inactive {
+    @apply bg-white text-gray-400 border-gray-200;
+  }
+
+  .profile-badge {
+    @apply inline-block px-6 py-3 rounded-full font-bold text-lg text-white;
+    background: linear-gradient(135deg, #7c3aed, #a855f7, #d946ef);
+    box-shadow: 0 8px 25px rgba(124, 58, 237, 0.25);
+  }
+}
