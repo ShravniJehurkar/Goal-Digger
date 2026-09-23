@@ -1,5 +1,4 @@
 import { Express, Request, Response } from "express";
-import { createServer, Server } from "http";
 import { z, ZodError } from "zod";
 import { fromZodError } from "zod-validation-error";
 
@@ -216,7 +215,7 @@ function calculateCareerScore(
  *
  * Calculates the user's complete assessment.
  */
-export function registerRoutes(app: Express): Server {
+export function registerRoutes(app: Express): Express {
   app.post("/api/ikigai-profile", async (req: Request, res: Response) => {
     try {
       const parsed = ikigaiProfileSchema.parse(req.body);
@@ -538,5 +537,5 @@ export function registerRoutes(app: Express): Server {
     }
   );
 
-  return createServer(app);
+  return app;
 }
