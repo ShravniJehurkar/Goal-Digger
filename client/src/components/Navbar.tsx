@@ -1,7 +1,11 @@
 import { Link } from "wouter";
-import { Menu, ArrowRight, Leaf } from "lucide-react";
+import { Menu, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 
 export default function Navbar() {
   return (
@@ -18,38 +22,31 @@ export default function Navbar() {
         "
       >
         <div className="h-[82px] px-5 md:px-7 flex items-center justify-between">
+
           {/* LOGO */}
           <Link href="/" className="shrink-0">
             <div className="flex items-center gap-3">
+
+              {/* GOAL DIGGER ICON */}
               <div
                 className="
                   relative
-                  w-11
-                  h-11
+                  w-12
+                  h-12
                   rounded-full
-                  flex
-                  items-center
-                  justify-center
-                  bg-gradient-to-br
-                  from-violet-500/20
-                  to-fuchsia-400/20
+                  overflow-hidden
+                  shrink-0
+                  shadow-[0_6px_20px_rgba(124,58,237,0.30)]
                 "
               >
-                <Leaf
-                  className="
-                    w-7
-                    h-7
-                    text-violet-600
-                    -rotate-12
-                  "
-                  strokeWidth={1.8}
+                <img
+                  src="/goal-digger-icon.png"
+                  alt="Goal Digger"
+                  className="w-full h-full object-cover"
                 />
-
-                <span className="absolute -top-1 right-0 text-violet-400 text-xs">
-                  ✦
-                </span>
               </div>
 
+              {/* BRAND NAME */}
               <div className="leading-none">
                 <div className="flex items-baseline gap-1">
                   <span
@@ -99,6 +96,7 @@ export default function Navbar() {
                   DISCOVER · PLAN · GROW
                 </p>
               </div>
+
             </div>
           </Link>
 
@@ -163,6 +161,7 @@ export default function Navbar() {
 
           {/* RIGHT SIDE */}
           <div className="flex items-center gap-3">
+
             <Link href="/questionnaire">
               <Button
                 className="
@@ -186,7 +185,10 @@ export default function Navbar() {
                 "
               >
                 Get Started
-                <ArrowRight className="ml-2 w-4 h-4" strokeWidth={2} />
+                <ArrowRight
+                  className="ml-2 w-4 h-4"
+                  strokeWidth={2}
+                />
               </Button>
             </Link>
 
@@ -226,6 +228,7 @@ export default function Navbar() {
                 "
               >
                 <div className="flex flex-col mt-10 gap-3">
+
                   <Link href="/">
                     <span className="block px-4 py-3 rounded-xl text-gray-700 hover:bg-violet-50 hover:text-violet-700 cursor-pointer transition-colors">
                       About
@@ -263,10 +266,13 @@ export default function Navbar() {
                       </Button>
                     </Link>
                   </div>
+
                 </div>
               </SheetContent>
             </Sheet>
+
           </div>
+
         </div>
       </div>
     </nav>
